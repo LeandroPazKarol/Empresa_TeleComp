@@ -17,7 +17,9 @@ public class ResolverReclamoController {
 
         this.view.setResolverReclamoListener((id, descripcion, responsable) -> {
             try {
-                service.resolverReclamoConResolucion(id, new Date(), descripcion, responsable);
+                // Llama al método para actualizar resolución (fecha se actualiza en BD automáticamente)
+                service.actualizarResolucion(id, descripcion, responsable);
+
                 List<Reclamo> reclamos = service.listarReclamosAbiertos();
                 view.actualizarListaReclamos(reclamos);
             } catch (Exception e) {

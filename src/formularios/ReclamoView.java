@@ -18,6 +18,7 @@ public class ReclamoView extends JFrame {
 
     @FunctionalInterface
     public interface ResolverReclamoListener {
+
         void accept(int id, String descripcion, String responsable);
     }
 
@@ -28,7 +29,7 @@ public class ReclamoView extends JFrame {
         setTitle("Gestión de Reclamos");
         setSize(1000, 600);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-    setLocationRelativeTo(null);
+        setLocationRelativeTo(null);
 
         /* ===========================
            TABLA A LA IZQUIERDA
@@ -64,19 +65,22 @@ public class ReclamoView extends JFrame {
 
         JTextField txtResponsable = new JTextField(20);
 
-        gbc.gridx = 0; gbc.gridy = 0;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
         panelResolver.add(new JLabel("Descripción:"), gbc);
         gbc.gridx = 1;
         panelResolver.add(scrollDesc, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 1;
         panelResolver.add(new JLabel("Responsable:"), gbc);
         gbc.gridx = 1;
         panelResolver.add(txtResponsable, gbc);
 
         /* BOTÓN DEBAJO */
         btnResolver = new JButton("Resolver Reclamo");
-        gbc.gridx = 1; gbc.gridy = 2;
+        gbc.gridx = 1;
+        gbc.gridy = 2;
         gbc.fill = GridBagConstraints.NONE;
         gbc.anchor = GridBagConstraints.EAST;
         panelResolver.add(btnResolver, gbc);
@@ -102,17 +106,20 @@ public class ReclamoView extends JFrame {
         txtDescripcionResolucionDetalles.setEditable(false);
         JScrollPane scrollDetalles = new JScrollPane(txtDescripcionResolucionDetalles);
 
-        gbc2.gridx = 0; gbc2.gridy = 0;
+        gbc2.gridx = 0;
+        gbc2.gridy = 0;
         panelDetalles.add(new JLabel("Fecha resolución:"), gbc2);
         gbc2.gridx = 1;
         panelDetalles.add(txtFechaResolucionDetalles, gbc2);
 
-        gbc2.gridx = 0; gbc2.gridy = 1;
+        gbc2.gridx = 0;
+        gbc2.gridy = 1;
         panelDetalles.add(new JLabel("Responsable:"), gbc2);
         gbc2.gridx = 1;
         panelDetalles.add(txtResponsableDetalles, gbc2);
 
-        gbc2.gridx = 0; gbc2.gridy = 2;
+        gbc2.gridx = 0;
+        gbc2.gridy = 2;
         panelDetalles.add(new JLabel("Descripción:"), gbc2);
         gbc2.gridx = 1;
         panelDetalles.add(scrollDetalles, gbc2);
@@ -151,9 +158,9 @@ public class ReclamoView extends JFrame {
             }
         });
 
-        /* ===========================
-           EVENTO BOTÓN RESOLVER
-        ============================ */
+          /* ===========================
+              EVENTO BOTÓN RESOLVER
+          ============================ */
         btnResolver.addActionListener(e -> {
             int fila = tablaReclamos.getSelectedRow();
             if (fila < 0) {
@@ -174,6 +181,12 @@ public class ReclamoView extends JFrame {
                 resolverListener.accept(id, descripcion, responsable);
             }
 
+            // Actualiza la vista de detalles con los nuevos datos 
+            txtDescripcionResolucionDetalles.setText(descripcion);
+            txtResponsableDetalles.setText(responsable);
+            txtFechaResolucionDetalles.setText(java.time.LocalDate.now().toString());
+
+            // Limpia campos de ingreso luego d 
             txtDescripcionResolucion.setText("");
             txtResponsable.setText("");
         });
@@ -197,4 +210,3 @@ public class ReclamoView extends JFrame {
         JOptionPane.showMessageDialog(this, msg, "Error", JOptionPane.ERROR_MESSAGE);
     }
 }
-

@@ -20,9 +20,13 @@ public class ReclamoService {
     public List<Reclamo> listarReclamosAbiertos() throws Exception {
         return ireclamo.listarReclamosAbiertos();
     }
-    
+
     public void resolverReclamoConResolucion(int idReclamo, Date fechaResolucion, String descripcion, String responsable) throws Exception {
-    ireclamo.resolverReclamoConResolucion(idReclamo, fechaResolucion, descripcion, responsable);
-}
+        ireclamo.resolverReclamoConResolucion(idReclamo, fechaResolucion, descripcion, responsable);
+    }
+
+    public void actualizarResolucion(int idReclamo, String descripcion, String responsable) throws Exception {
+        ireclamo.actualizarResolucion(idReclamo, descripcion, responsable);
+    }
 
 }

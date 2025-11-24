@@ -199,3 +199,21 @@ BEGIN
         Resolucion res ON r.idReclamo = res.idReclamo;
 END
 //DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE sp_actualizarResolucion(
+    IN p_idReclamo INT,
+    IN p_descripcion TEXT,
+    IN p_responsable VARCHAR(100)
+)
+BEGIN
+    UPDATE Resolucion
+    SET descripcion = p_descripcion,
+        responsable = p_responsable,
+        fechaResolucion = CURDATE()
+    WHERE idReclamo = p_idReclamo;
+END$$
+
+DELIMITER ;
+

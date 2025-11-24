@@ -15,8 +15,7 @@ public class ResolverReclamoDao implements IReclamo {
 
     @Override
     public void resolverReclamo(int id) throws Exception {
-        try (Connection cn = ConexionBD.getConnection(); 
-             CallableStatement cs = cn.prepareCall("{call sp_resolverReclamo(?)}")) {
+        try (Connection cn = ConexionBD.getConnection(); CallableStatement cs = cn.prepareCall("{call sp_resolverReclamo(?)}")) {
             cs.setInt(1, id);
             cs.executeUpdate();
         }
@@ -24,8 +23,7 @@ public class ResolverReclamoDao implements IReclamo {
 
     @Override
     public void resolverReclamoConResolucion(int idReclamo, Date fechaResolucion, String descripcion, String responsable) throws Exception {
-        try (Connection cn = ConexionBD.getConnection(); 
-             CallableStatement cs = cn.prepareCall("{call sp_resolverReclamoConResolucion(?,?,?,?)}")) {
+        try (Connection cn = ConexionBD.getConnection(); CallableStatement cs = cn.prepareCall("{call sp_resolverReclamoConResolucion(?,?,?,?)}")) {
             cs.setInt(1, idReclamo);
             cs.setDate(2, new java.sql.Date(fechaResolucion.getTime()));
             cs.setString(3, descripcion);
@@ -37,9 +35,7 @@ public class ResolverReclamoDao implements IReclamo {
     @Override
     public List<Reclamo> listarReclamosAbiertos() throws Exception {
         List<Reclamo> lista = new ArrayList<>();
-        try (Connection cn = ConexionBD.getConnection(); 
-             CallableStatement cs = cn.prepareCall("{call sp_listarTodosReclamosConResolucion()}"); 
-             ResultSet rs = cs.executeQuery()) {
+        try (Connection cn = ConexionBD.getConnection(); CallableStatement cs = cn.prepareCall("{call sp_listarTodosReclamosConResolucion()}"); ResultSet rs = cs.executeQuery()) {
             while (rs.next()) {
                 Reclamo r = new Reclamo();
                 r.setIdReclamo(rs.getInt("idReclamo"));
@@ -66,5 +62,16 @@ public class ResolverReclamoDao implements IReclamo {
         }
         return lista;
     }
-}
 
+    public void actualizarResolucion(int idReclamo, String descripcion, String responsable) throws Exception {
+        try (Connection cn = ConexionBD.getConnection(); CallableStatement cs = cn.prepareCall("{call sp_actualizarResolucion(?,?,?)}")) {
+
+            cs.setInt(1, idReclamo);
+            cs.setString(2, descripcion);
+            cs.setString(3, responsable);
+
+            cs.executeUpdate();
+        }
+    }
+
+}
