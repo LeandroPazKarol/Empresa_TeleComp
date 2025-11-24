@@ -1,5 +1,5 @@
 package entity;
-
+import entity.Resolucion;
 import java.util.Date;
 
 public class Reclamo {
@@ -14,10 +14,14 @@ public class Reclamo {
     private int idAreaAsignada;
     private int idUsuarioRegistra;
 
+    // Nueva asociación con Resolucion
+    private Resolucion resolucion;
+
     public Reclamo() {
     }
 
-    public Reclamo(int idReclamo, Date fechaRegistro, String tipo, String descripcion, String estado, String canalIngreso, int idCLiente, int idAreaAsignada, int idUsuarioRegistra) {
+    public Reclamo(int idReclamo, Date fechaRegistro, String tipo, String descripcion, String estado,
+                   String canalIngreso, int idCLiente, int idAreaAsignada, int idUsuarioRegistra) {
         this.idReclamo = idReclamo;
         this.fechaRegistro = fechaRegistro;
         this.tipo = tipo;
@@ -28,6 +32,8 @@ public class Reclamo {
         this.idAreaAsignada = idAreaAsignada;
         this.idUsuarioRegistra = idUsuarioRegistra;
     }
+
+    // Getters y setters para todos los atributos
 
     public int getIdReclamo() {
         return idReclamo;
@@ -101,4 +107,11 @@ public class Reclamo {
         this.idUsuarioRegistra = idUsuarioRegistra;
     }
 
+    public Resolucion getResolucion() {
+        return resolucion;
+    }
+
+    public void setResolucion(Resolucion resolucion) {
+        this.resolucion = resolucion;
+    }
 }

@@ -4,6 +4,10 @@
  */
 package formularios;
 
+import Controller.ResolverReclamoController;
+import Dao.ResolverReclamoDao;
+import Service.ReclamoService;
+
 /**
  *
  * @author lenovo
@@ -85,9 +89,19 @@ public class Menu extends javax.swing.JFrame {
         jMenu3.setText("Procesos");
 
         itemResolverReclamo.setText("Resolver Reclamo");
+        itemResolverReclamo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rr(evt);
+            }
+        });
         jMenu3.add(itemResolverReclamo);
 
         itemRegistrarReclamo.setText("Registrar Reclamo");
+        itemRegistrarReclamo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemRegistrarReclamoActionPerformed(evt);
+            }
+        });
         jMenu3.add(itemRegistrarReclamo);
 
         jMenuBar1.add(jMenu3);
@@ -118,6 +132,19 @@ public class Menu extends javax.swing.JFrame {
     private void itemClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemClienteActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_itemClienteActionPerformed
+
+    private void itemRegistrarReclamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemRegistrarReclamoActionPerformed
+        // TODO add your handling code here:
+        formRegistrarReclamo frm = new formRegistrarReclamo();
+        frm.setLocationRelativeTo(this);
+        frm.setVisible(true);
+    }//GEN-LAST:event_itemRegistrarReclamoActionPerformed
+
+    private void rr(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rr
+        ReclamoView view = new ReclamoView();
+        ResolverReclamoController controller = new ResolverReclamoController(new ReclamoService(new ResolverReclamoDao()), view);
+        view.setVisible(true);
+    }//GEN-LAST:event_rr
 
     /**
      * @param args the command line arguments

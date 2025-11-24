@@ -42,8 +42,8 @@ public class ClienteDao {
                     cliente.setNombre(rs.getString("nombre"));
                     cliente.setApellidos(rs.getString("apellidos"));
                     cliente.setTelefono(rs.getString("telefono"));
-                    cliente.setEmail(rs.getString("emial"));
-                    cliente.setNumeroContrato(rs.getString("numeroCOntrato"));
+                    cliente.setEmail(rs.getString("email"));
+                    cliente.setNumeroContrato(rs.getString("numeroContrato"));
                 }
             }
         }catch(SQLException e){

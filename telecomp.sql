@@ -11,6 +11,7 @@ CREATE TABLE Cliente (
     email VARCHAR(100),
     numeroContrato VARCHAR(20) UNIQUE
 );
+ALTER TABLE Cliente RENAME COLUMN nombres TO nombre;
 
 CREATE TABLE Usuario (
     idUsuario INT AUTO_INCREMENT PRIMARY KEY,
@@ -104,3 +105,97 @@ BEGIN
     INSERT INTO Cliente (DNI, nombres, apellidos, telefono, email, numeroContrato)
     VALUES (p_DNI, p_nombres, p_apellidos, p_telefono, p_email, p_numeroContrato);
 END //
+DELIMITER //
+CREATE PROCEDURE sp_resolverReclamo(IN p_idReclamo INT)
+BEGIN
+    UPDATE Reclamo
+    SET estado = 'Resuelto'
+    WHERE idReclamo = p_idReclamo;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE sp_listarReclamosAbiertos()
+BEGIN
+    SELECT * FROM Reclamo WHERE estado = 'Abierto';
+END //
+DELIMITER ;
+select*from reclamo;
+DELIMITER //
+CREATE PROCEDURE sp_listarTodosReclamos()
+BEGIN
+    SELECT * FROM Reclamo;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE sp_listarReclamosPendientes()
+BEGIN
+    SELECT * FROM Reclamo WHERE estado IN ('Abierto', 'Resuelto');
+END //
+DELIMITER ;
+DELIMITER //
+
+CREATE PROCEDURE sp_registrarReclamo(
+    IN p_tipo VARCHAR(50),
+    IN p_descripcion TEXT,
+    IN p_estado VARCHAR(20),
+    IN p_canal VARCHAR(30),
+    IN p_idCliente INT,
+    IN p_idArea INT,
+    IN p_idUsuario INT
+)
+BEGIN
+    INSERT INTO reclamo(fechaRegistro, tipo, descripcion, estado, canalIngreso, idCliente, idAreaAsignada, idUsuarioRegistra)
+    VALUES (NOW(), p_tipo, p_descripcion, p_estado, p_canal, p_idCliente, p_idArea, p_idUsuario);
+END //
+
+DELIMITER ;
+ 
+DELIMITER //
+
+CREATE PROCEDURE sp_buscarClientesPorDNI(
+    IN p_dni VARCHAR(8)
+)
+BEGIN
+    SELECT 
+        idCliente,
+        DNI,
+        nombres,
+        apellidos,
+        telefono,
+        email,
+        numeroContrato
+    FROM cliente
+    WHERE DNI = p_dni;
+END //
+
+DELIMITER ;
+select * from resolucion;
+select * from reclamo;
+DELIMITER //
+CREATE PROCEDURE sp_resolverReclamoConResolucion(
+    IN p_idReclamo INT,
+    IN p_fechaResolucion DATE,
+    IN p_descripcion TEXT,
+    IN p_responsable VARCHAR(100)
+)
+BEGIN
+    INSERT INTO Resolucion(fechaResolucion, descripcion, responsable, idReclamo)
+    VALUES(p_fechaResolucion, p_descripcion, p_responsable, p_idReclamo);
+    
+    UPDATE Reclamo SET estado = 'Resuelto' WHERE idReclamo = p_idReclamo;
+END;
+//DELIMITER ;
+DELIMITER //
+CREATE PROCEDURE sp_listarTodosReclamosConResolucion()
+BEGIN
+    SELECT 
+        r.idReclamo, r.tipo, r.descripcion, r.estado, r.idCliente, r.idAreaAsignada, r.idUsuarioRegistra,
+        res.idResolucion, res.fechaResolucion, res.descripcion AS descripcionResolucion, res.responsable
+    FROM 
+        Reclamo r
+    LEFT JOIN 
+        Resolucion res ON r.idReclamo = res.idReclamo;
+END
+//DELIMITER ;
