@@ -46,7 +46,6 @@ public class Menu extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         desktopPane.setBackground(new java.awt.Color(153, 204, 255));
-        desktopPane.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         getContentPane().add(desktopPane, java.awt.BorderLayout.CENTER);
 
         jMenu1.setText("Archivo");
@@ -112,7 +111,14 @@ public class Menu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void itemUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemUsuarioActionPerformed
-        // TODO add your handling code here:
+      try{ 
+          formularios.frmGestionUsuario ventana = new formularios.frmGestionUsuario();
+       this.desktopPane.add(ventana);
+       ventana.setVisible(true);
+      } catch(Exception e){
+      e.printStackTrace();
+      javax.swing.JOptionPane.showMessageDialog(null,"Error al abrir la ventana: "+e.getMessage());
+      }
     }//GEN-LAST:event_itemUsuarioActionPerformed
 
     private void itemClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemClienteActionPerformed

@@ -16,15 +16,14 @@ public class ConexionBD {
     private ConexionBD() {
     }
 
-    public static Connection getConnection() {
-        if (con == null) {
-            try {
+   public static Connection getConnection() {
+        try {
+            if (con == null || con.isClosed()) {
                 Class.forName(DRIVER);
                 con = DriverManager.getConnection(URL, USER, PASSWORD);
-            } catch (ClassNotFoundException | SQLException e) {
-                JOptionPane.showMessageDialog(null, "Error de conexion a la base de datos");
-                System.exit(1);
             }
+        } catch (ClassNotFoundException | SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error de conexion a la base de datos: " + e.getMessage());
         }
         return con;
     }

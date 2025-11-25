@@ -7,18 +7,18 @@ import javax.swing.JOptionPane;
 
 public class ClienteDao {
 
-    private Connection con = ConexionBD.getConnection();
 
     public boolean registrarCliente(Cliente cliente) throws SQLException {
         String sql = "{CALL sp_registrarCliente(?,?,?,?,?,?)}";
 
-        try (CallableStatement cs = con.prepareCall(sql)) {
+        try (Connection con=ConexionBD.getConnection();
+                CallableStatement cs = con.prepareCall(sql)) {
             cs.setString(1, cliente.getDNI());
             cs.setString(2, cliente.getNombre());
             cs.setString(3, cliente.getApellidos());
             cs.setString(4, cliente.getTelefono());
             cs.setString(5, cliente.getEmail());
-            cs.setString(5, cliente.getNumeroContrato());
+            cs.setString(6, cliente.getNumeroContrato());
 
             cs.executeUpdate();
             return true;
@@ -29,21 +29,22 @@ public class ClienteDao {
     }
 
     public Cliente buscarporDNI(String dni) throws SQLException {
-        String sql = "{CALL sp_buscarClientePOrDNI(?)}";
+        String sql = "{CALL sp_buscarClientePorDNI(?)}";
         Cliente cliente = null;
 
-        try (CallableStatement cs = con.prepareCall(sql)) {
+        try (Connection con=ConexionBD.getConnection();
+                CallableStatement cs = con.prepareCall(sql)) {
             cs.setString(1, dni);
             try (ResultSet rs = cs.executeQuery()) {
                 if (rs.next()) {
                     cliente = new Cliente();
                     cliente.setIdCliente(rs.getInt("idCliente"));
                     cliente.setDNI(rs.getString("DNI"));
-                    cliente.setNombre(rs.getString("nombre"));
+                    cliente.setNombre(rs.getString("nombres"));
                     cliente.setApellidos(rs.getString("apellidos"));
                     cliente.setTelefono(rs.getString("telefono"));
-                    cliente.setEmail(rs.getString("emial"));
-                    cliente.setNumeroContrato(rs.getString("numeroCOntrato"));
+                    cliente.setEmail(rs.getString("email"));
+                    cliente.setNumeroContrato(rs.getString("numeroContrato"));
                 }
             }
         }catch(SQLException e){
