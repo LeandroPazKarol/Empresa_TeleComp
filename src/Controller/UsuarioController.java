@@ -44,7 +44,7 @@ public class UsuarioController {
                 u.getIdUsuario(),
                 u.getNombreUsuario(),
                 u.getRol(),
-                u.getIdArea()
+                u.getNombreArea()
             });
         }
     }

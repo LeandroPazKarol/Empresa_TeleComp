@@ -34,7 +34,11 @@ public class frmGestionUsuario extends javax.swing.JInternalFrame {
         txtUsuario.setText("");
         txtPass.setText("");
         cboRol.setSelectedIndex(0);
+        if(cboRol.getItemCount()>0){cboRol.setSelectedIndex(0);}
         if (cboArea.getItemCount() > 0) cboArea.setSelectedIndex(0);
+        
+        tblUsuarios.clearSelection();
+        tblUsuarios.getSelectionModel().clearSelection();
         
         tblUsuarios.clearSelection(); 
         btnGuardar.setEnabled(true);
@@ -60,10 +64,11 @@ public class frmGestionUsuario extends javax.swing.JInternalFrame {
         jLabel4 = new javax.swing.JLabel();
         cboArea = new javax.swing.JComboBox<>();
         btnEditar = new javax.swing.JButton();
+        btnNuevo = new javax.swing.JButton();
 
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel1.setBackground(new java.awt.Color(102, 204, 255));
+        jPanel1.setBackground(new java.awt.Color(153, 204, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -77,7 +82,7 @@ public class frmGestionUsuario extends javax.swing.JInternalFrame {
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel3.setText("Contraseña:");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 90, -1, -1));
-        jPanel1.add(txtUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 20, 180, 40));
+        jPanel1.add(txtUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 20, 190, 40));
         jPanel1.add(txtPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 80, 190, 40));
 
         cboRol.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Admin", "Agente", "Tecnico" }));
@@ -86,7 +91,7 @@ public class frmGestionUsuario extends javax.swing.JInternalFrame {
                 cboRolActionPerformed(evt);
             }
         });
-        jPanel1.add(cboRol, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 140, 180, 50));
+        jPanel1.add(cboRol, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 140, 190, 50));
 
         btnEliminar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnEliminar.setText("ELIMINAR");
@@ -95,7 +100,7 @@ public class frmGestionUsuario extends javax.swing.JInternalFrame {
                 btnEliminarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 210, -1, -1));
+        jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 160, -1, -1));
 
         btnGuardar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnGuardar.setText("GUARDAR");
@@ -104,7 +109,7 @@ public class frmGestionUsuario extends javax.swing.JInternalFrame {
                 btnGuardarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 60, -1, -1));
+        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 60, -1, -1));
 
         jScrollPane1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -145,7 +150,16 @@ public class frmGestionUsuario extends javax.swing.JInternalFrame {
                 btnEditarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 140, -1, -1));
+        jPanel1.add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 110, -1, -1));
+
+        btnNuevo.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnNuevo.setText("NUEVO");
+        btnNuevo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevoActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnNuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 210, -1, -1));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 680, 590));
 
@@ -259,11 +273,17 @@ public class frmGestionUsuario extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
+    private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
+       limpiar();
+       txtUsuario.requestFocus();
+    }//GEN-LAST:event_btnNuevoActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton btnEditar;
     public javax.swing.JButton btnEliminar;
     public javax.swing.JButton btnGuardar;
+    public javax.swing.JButton btnNuevo;
     public javax.swing.JComboBox<String> cboArea;
     public javax.swing.JComboBox<String> cboRol;
     private javax.swing.JLabel jLabel1;

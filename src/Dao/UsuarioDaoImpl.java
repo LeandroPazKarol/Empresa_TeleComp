@@ -79,6 +79,7 @@ public class UsuarioDaoImpl implements IUsuarioDao {
             cs.setString(3, u.getPassword());
             cs.setString(4, u.getRol());
             cs.setInt(5, u.getIdArea());
+            cs.executeUpdate();
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
