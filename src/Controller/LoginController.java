@@ -1,8 +1,10 @@
 package Controller;
 
+import Dao.IUsuarioDao;
 import Dao.UsuarioDaoImpl;
 import Dao.UsuarioDaoImpl;
 import entity.Usuario;
+import factory.DaoFactory;
 import formularios.Login;
 import formularios.Menu;
 import java.awt.event.ActionEvent;
@@ -15,11 +17,11 @@ import javax.swing.JOptionPane;
 public class LoginController implements ActionListener {
 
     private Login view;
-    private UsuarioDaoImpl usaurioDAO;
+    private IUsuarioDao usaurioDAO;
 
     public LoginController(Login view) {
         this.view = view;
-        this.usaurioDAO = new UsuarioDaoImpl();
+        this.usaurioDAO = DaoFactory.getUsuarioDao();
         this.view.btnIngresa.addActionListener(this);
         this.view.btnSalir.addActionListener(this);
     }
