@@ -104,3 +104,46 @@ BEGIN
     INSERT INTO Cliente (DNI, nombres, apellidos, telefono, email, numeroContrato)
     VALUES (p_DNI, p_nombres, p_apellidos, p_telefono, p_email, p_numeroContrato);
 END //
+
+DROP PROCEDURE IF EXISTS sp_actualizarCliente //
+CREATE PROCEDURE sp_actualizarCliente(
+    IN p_DNI VARCHAR(8),
+    IN p_nombres VARCHAR(100),
+    IN p_apellidos VARCHAR(100),
+    IN p_telefono VARCHAR(15),
+    IN p_email VARCHAR(100),
+    IN p_numeroContrato VARCHAR(20)
+)
+BEGIN
+    UPDATE Cliente
+    SET nombres = p_nombres,
+        apellidos = p_apellidos,
+        telefono = p_telefono,
+        email = p_email,
+        numeroContrato = p_numeroContrato
+    WHERE DNI = p_DNI;
+END //
+
+DROP PROCEDURE IF EXISTS sp_eliminarCliente //
+CREATE PROCEDURE sp_eliminarCliente(
+    IN p_DNI VARCHAR(8)
+)
+BEGIN
+    DELETE FROM Cliente WHERE DNI = p_DNI;
+END //
+
+DROP PROCEDURE IF EXISTS sp_buscarClientePorDNI //
+CREATE PROCEDURE sp_buscarClientePorDNI(
+    IN p_DNI VARCHAR(8)
+)
+BEGIN
+    SELECT * FROM Cliente WHERE DNI = p_DNI;
+END //
+
+DROP PROCEDURE IF EXISTS sp_listarClientes //
+CREATE PROCEDURE sp_listarClientes()
+BEGIN
+    SELECT * FROM Cliente;
+END //
+
+DELIMITER ;
