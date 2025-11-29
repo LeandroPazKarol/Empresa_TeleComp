@@ -3,9 +3,17 @@ package Dao;
 import database.ConexionBD;
 import entity.Reclamo;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 public class ReclamoDao {
+    
+    
+    Statement stm = null;
+    PreparedStatement ps = null;
+    ResultSet rs = null;
+    String sql = "";
 
     private Connection con = ConexionBD.getConnection();
 
@@ -29,5 +37,43 @@ public class ReclamoDao {
             JOptionPane.showMessageDialog(null, "Error al registrar reclamo: " + e.getMessage());
             return false;
         }
+    }
+    
+    
+    public List<Reclamo> readAll() throws Exception {
+        List<Reclamo> lista = new ArrayList<>();
+        try {
+            con = ConexionBD.getConnection();
+            sql = "{call sp_consultarRegistros}";
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            lista = cargaLista(rs);
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            con.close();
+        }
+        return lista;
+    }
+    
+    private List<Reclamo> cargaLista(ResultSet rs) throws SQLException {
+        List<Reclamo> aux = new ArrayList<>();
+        while (rs.next()) {
+            Reclamo Reg = new Reclamo();
+            Reg.setIdReclamo(rs.getInt(1));
+            Reg.setFechaRegistro(rs.getDate(2));
+            Reg.setTipo(rs.getString(3));
+            Reg.setDescripcion(rs.getString(4));
+            Reg.setEstado(rs.getString(5));
+            Reg.setCanalIngreso(rs.getString(6));
+            Reg.setIdCLiente(rs.getInt(7));
+            Reg.setIdAreaAsignada(rs.getInt(8));
+            Reg.setIdUsuarioRegistra(rs.getInt(9));
+            aux.add(Reg);
+        }
+        rs.close();
+        return aux;
     }
 }
