@@ -1,75 +1,25 @@
 package formularios;
 
-import controller.ClienteController; // Asegúrate de tener este paquete o adáptalo
+import controller.ClienteController;
 import entity.Cliente;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class FrmClientes extends javax.swing.JFrame {
-
+    // Instancia del controlador que conecta con el DAO
     private ClienteController controller = new ClienteController();
-    private Cliente clienteActual; // Para guardar temporalmente datos
 
     public FrmClientes() {
+        // Inicializa los componentes visuales
         initComponents();
-        this.setLocationRelativeTo(null); // Centrar ventana
-        listarClientes(); // Cargar la tabla al iniciar
-    }
-
-    private void limpiar() {
-        txtId.setText("");
-        txtDni.setText("");
-        txtNombres.setText("");
-        txtApellidos.setText("");
-        txtTelefono.setText("");
-        txtEmail.setText("");
-        txtContrato.setText("");
-        txtDni.requestFocus();
-    }
-
-    private void listarClientes() {
-        try {
-            DefaultTableModel modelo = (DefaultTableModel) tblClientes.getModel();
-            modelo.setRowCount(0); // Limpiar tabla actual
-
-            List<Cliente> lista = controller.listarClientes(); // Asumiendo que existe en Controller
-
-            for (Cliente c : lista) {
-                Object[] fila = {
-                    c.getIdCliente(),
-                    c.getDNI(),
-                    c.getNombres(),
-                    c.getApellidos(),
-                    c.getTelefono(),
-                    c.getEmail(),
-                    c.getNumeroContrato()
-                };
-                modelo.addRow(fila);
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error al listar: " + e.getMessage());
-        }
-    }
-
-    private Cliente obtenerDatos() {
-        Cliente c = new Cliente();
-        // El ID no se setea al registrar porque es AUTO_INCREMENT, 
-        // pero sí se usa para visualizar o en lógica interna si fuera necesario.
-        if(!txtId.getText().isEmpty()){
-             c.setIdCliente(Integer.parseInt(txtId.getText()));
-        }
-        c.setDNI(txtDni.getText().trim());
-        c.setNombres(txtNombres.getText().trim());
-        c.setApellidos(txtApellidos.getText().trim());
-        c.setTelefono(txtTelefono.getText().trim());
-        c.setEmail(txtEmail.getText().trim());
-        c.setNumeroContrato(txtContrato.getText().trim());
-        return c;
+        // Centra la ventana en la pantalla
+        this.setLocationRelativeTo(null); 
+        // Carga la lista de clientes al abrir
+        listarClientes(); 
     }
 
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
@@ -118,7 +68,6 @@ public class FrmClientes extends javax.swing.JFrame {
 
         jLabel7.setText("Nro Contrato:");
 
-        btnInsertar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagen/save_all.png"))); // NOI18N
         btnInsertar.setText("Insertar");
         btnInsertar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -126,7 +75,6 @@ public class FrmClientes extends javax.swing.JFrame {
             }
         });
 
-        btnActualizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagen/contact-list.png"))); // NOI18N
         btnActualizar.setText("Actualizar");
         btnActualizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -134,7 +82,6 @@ public class FrmClientes extends javax.swing.JFrame {
             }
         });
 
-        btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagen/Cancel.png"))); // NOI18N
         btnEliminar.setText("Eliminar");
         btnEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -142,7 +89,6 @@ public class FrmClientes extends javax.swing.JFrame {
             }
         });
 
-        btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagen/buscar.gif"))); // NOI18N
         btnBuscar.setText("Buscar (DNI)");
         btnBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -150,7 +96,6 @@ public class FrmClientes extends javax.swing.JFrame {
             }
         });
 
-        btnCerrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagen/application-exit.png"))); // NOI18N
         btnCerrar.setText("Cerrar");
         btnCerrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -254,13 +199,12 @@ public class FrmClientes extends javax.swing.JFrame {
         );
 
         tblClientes.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
+            new Object [][] {},
             new String [] {
                 "ID", "DNI", "Nombres", "Apellidos", "Teléfono", "Email", "Contrato"
             }
         ));
+
         tblClientes.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblClientesMouseClicked(evt);
@@ -273,6 +217,7 @@ public class FrmClientes extends javax.swing.JFrame {
             tblClientes.getColumnModel().getColumn(6).setPreferredWidth(80);
         }
 
+        // LAYOUT PRINCIPAL DEL FRAME
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -295,7 +240,6 @@ public class FrmClientes extends javax.swing.JFrame {
         );
 
         pack();
-    }// </editor-fold>                        
 
     private void btnInsertarActionPerformed(java.awt.event.ActionEvent evt) {                                            
         try {
@@ -310,11 +254,9 @@ public class FrmClientes extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Cliente registrado correctamente.");
                 listarClientes();
                 limpiar();
-            } else {
-                JOptionPane.showMessageDialog(this, "Error al registrar cliente.");
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
         }
     }                                           
 
@@ -325,7 +267,7 @@ public class FrmClientes extends javax.swing.JFrame {
             return;
         }
         try {
-            Cliente c = controller.buscarCliente(dni); // Método asumido en el controller
+            Cliente c = controller.buscarCliente(dni);
             if (c != null) {
                 txtId.setText(String.valueOf(c.getIdCliente()));
                 txtDni.setText(c.getDNI());
@@ -355,11 +297,9 @@ public class FrmClientes extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Cliente actualizado correctamente.");
                 listarClientes();
                 limpiar();
-            } else {
-                JOptionPane.showMessageDialog(this, "No se pudo actualizar (Verifique DNI).");
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
         }
     }                                             
 
@@ -381,7 +321,7 @@ public class FrmClientes extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this, "No se pudo eliminar.");
                 }
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, e.getMessage());
+                JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
             }
         }
     }                                           
@@ -410,11 +350,59 @@ public class FrmClientes extends javax.swing.JFrame {
             txtEmail.setText(mail != null ? mail.toString() : "");
             txtContrato.setText(cont != null ? cont.toString() : "");
         }
-    }                                        
+    }
+
+    // Otros métodos
+    private void limpiar() {
+        txtId.setText("");
+        txtDni.setText("");
+        txtNombres.setText("");
+        txtApellidos.setText("");
+        txtTelefono.setText("");
+        txtEmail.setText("");
+        txtContrato.setText("");
+        txtDni.requestFocus();
+    }
+
+    private void listarClientes() {
+        try {
+            DefaultTableModel modelo = (DefaultTableModel) tblClientes.getModel();
+            modelo.setRowCount(0); 
+
+            List<Cliente> lista = controller.listarClientes();
+
+            for (Cliente c : lista) {
+                Object[] fila = {
+                    c.getIdCliente(),
+                    c.getDNI(),
+                    c.getNombres(),
+                    c.getApellidos(),
+                    c.getTelefono(),
+                    c.getEmail(),
+                    c.getNumeroContrato()
+                };
+                modelo.addRow(fila);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al listar: " + e.getMessage());
+        }
+    }
+
+    private Cliente obtenerDatos() {
+        Cliente c = new Cliente();
+        if(!txtId.getText().isEmpty()){
+             try{ c.setIdCliente(Integer.parseInt(txtId.getText())); } catch(Exception e){}
+        }
+        c.setDNI(txtDni.getText().trim());
+        c.setNombres(txtNombres.getText().trim());
+        c.setApellidos(txtApellidos.getText().trim());
+        c.setTelefono(txtTelefono.getText().trim());
+        c.setEmail(txtEmail.getText().trim());
+        c.setNumeroContrato(txtContrato.getText().trim());
+        return c;
+    }
 
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -422,19 +410,18 @@ public class FrmClientes extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (Exception ex) {
             java.util.logging.Logger.getLogger(FrmClientes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
 
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new FrmClientes().setVisible(true);
             }
         });
     }
-                 
+
+    // Variables de componentes
     private javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnCerrar;
@@ -458,5 +445,5 @@ public class FrmClientes extends javax.swing.JFrame {
     private javax.swing.JTextField txtId;
     private javax.swing.JTextField txtNombres;
     private javax.swing.JTextField txtTelefono;
-    // End of variables declaration                   
+    // End of variables declaration
 }
