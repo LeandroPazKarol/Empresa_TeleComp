@@ -16,8 +16,7 @@ public class ClienteDao {
      */
     private static ClienteDao instancia;
 
-    // Constructor privado
-    private ClienteDao() {
+    public ClienteDao() {
         observadores = new ArrayList<>();
     }
 
