@@ -2,7 +2,7 @@ package entity;
 
 import java.util.Date;
 
-public class Notificaciones {
+public class Notificacion {
 
     private int idNotificacion;
     private Date fechaEnvio;
@@ -10,15 +10,14 @@ public class Notificaciones {
     private String contenido;
     private int idReclamo;
 
-    public Notificaciones() {
+    public Notificacion() {
     }
 
-    public Notificaciones(int idNotificacion, Date fechaEnvio, String medio, String contenido, int idReclamo) {
-        this.idNotificacion = idNotificacion;
-        this.fechaEnvio = fechaEnvio;
+    public Notificacion(int idReclamo, String medio, String contenido) {
+        this.idReclamo = idReclamo;
         this.medio = medio;
         this.contenido = contenido;
-        this.idReclamo = idReclamo;
+        this.fechaEnvio = new Date(); // Se pone la fecha actual automáticamente
     }
 
     public int getIdNotificacion() {

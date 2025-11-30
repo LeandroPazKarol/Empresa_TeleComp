@@ -1,7 +1,9 @@
 package Controller;
 
-import Dao.UsuarioDao;
+import Dao.UsuarioDaoImpl;
+import Dao.UsuarioDaoImpl;
 import entity.Usuario;
+import factory.DaoFactory;
 import formularios.Login;
 import formularios.Menu;
 import java.awt.event.ActionEvent;
@@ -10,22 +12,22 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import Repository.IUsuario;
 
 public class LoginController implements ActionListener {
 
     private Login view;
-    private UsuarioDao usaurioDAO;
+    private IUsuario usaurioDAO;
 
     public LoginController(Login view) {
         this.view = view;
-        this.usaurioDAO = new UsuarioDao();
+        this.usaurioDAO = DaoFactory.getUsuarioDao();
         this.view.btnIngresa.addActionListener(this);
-        this.view.btnSalir.addActionListener(this);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == view.btnIngresa || e.getSource() == view.btnSalir) {
+        if (e.getSource() == view.btnIngresa) {
             String usuario = view.txtUsuario.getText().trim();
             String contraseña = new String(view.passPassword.getPassword());
 

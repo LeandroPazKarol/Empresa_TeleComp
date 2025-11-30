@@ -6,7 +6,7 @@ public class EncuestaSatisfaccion {
 
     private int idEncuesta;
     private Date fechaEnvio;
-    private int puntaje;
+    private Integer puntaje;
     private String comentario;
     private int idCliente;
     private int idReclamo;
@@ -14,13 +14,12 @@ public class EncuestaSatisfaccion {
     public EncuestaSatisfaccion() {
     }
 
-    public EncuestaSatisfaccion(int idEncuesta, Date fechaEnvio, int puntaje, String comentario, int idCliente, int idReclamo) {
-        this.idEncuesta = idEncuesta;
-        this.fechaEnvio = fechaEnvio;
-        this.puntaje = puntaje;
-        this.comentario = comentario;
+    public EncuestaSatisfaccion(int idCliente, int idReclamo) {
         this.idCliente = idCliente;
         this.idReclamo = idReclamo;
+        this.fechaEnvio = new Date();
+        this.puntaje = 0;
+        this.comentario = "";
     }
 
     public int getIdEncuesta() {
@@ -39,14 +38,13 @@ public class EncuestaSatisfaccion {
         this.fechaEnvio = fechaEnvio;
     }
 
-    public int getPuntaje() {
+    public Integer getPuntaje() {
         return puntaje;
     }
 
-    public void setPuntaje(int puntaje) {
+    public void setPuntaje(Integer puntaje) {
         this.puntaje = puntaje;
     }
-
     public String getComentario() {
         return comentario;
     }

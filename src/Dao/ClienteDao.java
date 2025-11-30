@@ -1,57 +1,164 @@
 package Dao;
 
+import Repository.IClienteObservador;
 import database.ConexionBD;
 import entity.Cliente;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 public class ClienteDao {
 
-    private Connection con = ConexionBD.getConnection();
+    /**
+     * Patrón utilizado: Singleton
+     * Ya que garantiza una sola conexión
+     * lógica y centraliza las notificaciones
+     */
+    private static ClienteDao instancia;
 
+    public ClienteDao() {
+        observadores = new ArrayList<>();
+    }
+
+    public static synchronized ClienteDao getInstance() {
+        if (instancia == null) {
+            instancia = new ClienteDao();
+        }
+        return instancia;
+    }
+
+    // Patrón Observer siendo utilizado
+    private List<IClienteObservador> observadores;
+
+    public void agregarObservador(IClienteObservador obs) {
+        observadores.add(obs);
+    }
+
+    private void notificarTodos(String mensaje) {
+        for (IClienteObservador obs : observadores) {
+            obs.notificarCambio(mensaje);
+        }
+    }
+
+    // MÉTODOS CRUD
     public boolean registrarCliente(Cliente cliente) throws SQLException {
         String sql = "{CALL sp_registrarCliente(?,?,?,?,?,?)}";
 
-        try (CallableStatement cs = con.prepareCall(sql)) {
+        try (Connection con = ConexionBD.getConnection();
+             CallableStatement cs = con.prepareCall(sql)) {
+
+            cs.setString(1, cliente.getDNI());
+            cs.setString(2, cliente.getNombre()); 
+            cs.setString(3, cliente.getApellidos());
+            cs.setString(4, cliente.getTelefono());
+            cs.setString(5, cliente.getEmail());
+            cs.setString(6, cliente.getNumeroContrato());
+
+            cs.executeUpdate();
+            
+            notificarTodos("Nuevo cliente registrado: " + cliente.getDNI());
+            return true;
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al registrar: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean actualizarCliente(Cliente cliente) throws SQLException {
+        String sql = "{CALL sp_actualizarCliente(?,?,?,?,?,?)}";
+
+        try (Connection con = ConexionBD.getConnection();
+             CallableStatement cs = con.prepareCall(sql)) {
+
             cs.setString(1, cliente.getDNI());
             cs.setString(2, cliente.getNombre());
             cs.setString(3, cliente.getApellidos());
             cs.setString(4, cliente.getTelefono());
             cs.setString(5, cliente.getEmail());
-            cs.setString(5, cliente.getNumeroContrato());
+            cs.setString(6, cliente.getNumeroContrato());
 
             cs.executeUpdate();
+            
+            notificarTodos("Cliente actualizado: " + cliente.getDNI());
             return true;
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Eroor al registrar cliente: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error al actualizar: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean eliminarCliente(String dni) throws SQLException {
+        String sql = "{CALL sp_eliminarCliente(?)}";
+
+        try (Connection con = ConexionBD.getConnection();
+             CallableStatement cs = con.prepareCall(sql)) {
+
+            cs.setString(1, dni);
+            int filas = cs.executeUpdate();
+
+            if (filas > 0) {
+                notificarTodos("Cliente eliminado DNI: " + dni);
+                return true;
+            } else {
+                return false;
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al eliminar: " + e.getMessage());
             return false;
         }
     }
 
     public Cliente buscarporDNI(String dni) throws SQLException {
-        String sql = "{CALL sp_buscarClientePOrDNI(?)}";
+        String sql = "{CALL sp_buscarClientePorDNI(?)}";
         Cliente cliente = null;
 
-        try (CallableStatement cs = con.prepareCall(sql)) {
+        try (Connection con = ConexionBD.getConnection();
+             CallableStatement cs = con.prepareCall(sql)) {
+
             cs.setString(1, dni);
+            
             try (ResultSet rs = cs.executeQuery()) {
                 if (rs.next()) {
-                    cliente = new Cliente();
-                    cliente.setIdCliente(rs.getInt("idCliente"));
-                    cliente.setDNI(rs.getString("DNI"));
-                    cliente.setNombre(rs.getString("nombre"));
-                    cliente.setApellidos(rs.getString("apellidos"));
-                    cliente.setTelefono(rs.getString("telefono"));
-                    cliente.setEmail(rs.getString("email"));
-                    cliente.setNumeroContrato(rs.getString("numeroContrato"));
+                    cliente = mapResultSetToCliente(rs);
                 }
             }
-        }catch(SQLException e){
-        JOptionPane.showMessageDialog(null,"Error al buscar cliente: "+e.getMessage());
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al buscar: " + e.getMessage());
         }
-   return cliente;
+        return cliente;
     }
 
-    
-    //agregar otros metodos
+    public List<Cliente> listarClientes() throws SQLException {
+        String sql = "{CALL sp_listarClientes()}";
+        List<Cliente> lista = new ArrayList<>();
+
+        try (Connection con = ConexionBD.getConnection();
+             CallableStatement cs = con.prepareCall(sql);
+             ResultSet rs = cs.executeQuery()) {
+
+            while (rs.next()) {
+                lista.add(mapResultSetToCliente(rs));
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al listar: " + e.getMessage());
+        }
+        return lista;
+    }
+
+    /**
+     * Líneas de código que nos ahorra líneas de
+     * código repetidas dentro de cada método CRUD
+     */
+    private Cliente mapResultSetToCliente(ResultSet rs) throws SQLException {
+        Cliente c = new Cliente();
+        c.setIdCliente(rs.getInt("idCliente"));
+        c.setDNI(rs.getString("DNI"));
+        c.setNombre(rs.getString("nombre")); 
+        c.setApellidos(rs.getString("apellidos"));
+        c.setTelefono(rs.getString("telefono"));
+        c.setEmail(rs.getString("email"));
+        c.setNumeroContrato(rs.getString("numeroContrato"));
+        return c;
+    }
 }

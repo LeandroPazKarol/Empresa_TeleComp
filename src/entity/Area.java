@@ -38,5 +38,10 @@ public class Area {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
-
+ 
+    //sobreescribe toString
+    @Override
+    public String toString() {
+        return nombreArea;
+    } 
 }

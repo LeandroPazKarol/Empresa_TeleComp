@@ -2,9 +2,9 @@ package Controller;
 
 import Service.ReclamoService;
 import entity.Reclamo;
+import factory.NotificacionFactory;
 import formularios.ReclamoView;
-import java.util.Date;
-import java.util.List;
+import observer.EnviadorEncuesta;
 
 public class ResolverReclamoController {
 
@@ -15,22 +15,47 @@ public class ResolverReclamoController {
         this.service = service;
         this.view = view;
 
-        this.view.setResolverReclamoListener((id, descripcion, responsable) -> {
+        view.setResolverReclamoListener((id, descripcion, responsable, medio) -> {
             try {
-                // Llama al método para actualizar resolución (fecha se actualiza en BD automáticamente)
-                service.actualizarResolucion(id, descripcion, responsable);
+                Reclamo reclamoSeleccionado = view.getReclamoSeleccionado();
 
-                List<Reclamo> reclamos = service.listarReclamosAbiertos();
-                view.actualizarListaReclamos(reclamos);
+                if (reclamoSeleccionado == null) {
+                    view.mostrarError("Seleccione un reclamo para resolver.");
+                    return;
+                }
+
+                // Validar campos obligatorios
+                if (descripcion == null || descripcion.trim().isEmpty()) {
+                    view.mostrarError("Debe ingresar una descripción de resolución.");
+                    return;
+                }
+                if (responsable == null || responsable.trim().isEmpty()) {
+                    view.mostrarError("Debe ingresar un responsable.");
+                    return;
+                }
+
+                // Notificación según medio seleccionado
+                if (!medio.equals("NINGUNO")) {
+                    service.agregarObservador(NotificacionFactory.crear(medio));
+                }
+
+                // Siempre enviar encuesta (obligatorio)
+                service.agregarObservador(new EnviadorEncuesta());
+
+                // Resolver reclamo y actualizar estado a RESUELTO
+                service.resolverReclamo(reclamoSeleccionado, descripcion.trim(), responsable.trim());
+
+                // Actualizar lista de reclamos en la vista
+                view.actualizarListaReclamos(service.listarReclamosAbiertos());
+
             } catch (Exception e) {
                 view.mostrarError(e.getMessage());
             }
         });
 
-        // Cargar datos iniciales
+        // Inicializar la tabla con reclamos abiertos
         try {
-            List<Reclamo> reclamos = service.listarReclamosAbiertos();
-            view.actualizarListaReclamos(reclamos);
+            view.actualizarListaReclamos(service.listarReclamosAbiertos());
         } catch (Exception e) {
             view.mostrarError(e.getMessage());
         }

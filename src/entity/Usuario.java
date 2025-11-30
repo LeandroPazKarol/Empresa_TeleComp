@@ -6,12 +6,13 @@ public class Usuario {
     private String nombreUsuario;
     private String password;
     private String rol; //agente, tecnico, admin
+    private int idArea;
+    private String nombreArea;
 
     public Usuario() {
     }
 
-    public Usuario(int idUsuario, String nombreUsuario, String password, String rol) {
-        this.idUsuario = idUsuario;
+    public Usuario( String nombreUsuario, String password, String rol) {
         this.nombreUsuario = nombreUsuario;
         this.password = password;
         this.rol = rol;
@@ -49,4 +50,20 @@ public class Usuario {
         this.rol = rol;
     }
 
+    public int getIdArea() {
+        return idArea;
+    }
+
+    public void setIdArea(int idArea) {
+        this.idArea = idArea;
+    }
+
+    public String getNombreArea() {
+        return nombreArea;
+    }
+
+    public void setNombreArea(String nombreArea) {
+        this.nombreArea = nombreArea;
+    }
+    
 }

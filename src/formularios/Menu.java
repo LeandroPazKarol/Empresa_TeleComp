@@ -31,6 +31,7 @@ public class Menu extends javax.swing.JFrame {
     private void initComponents() {
 
         desktopPane = new javax.swing.JDesktopPane();
+        jLabel1 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         itemCerrarSesion = new javax.swing.JMenuItem();
@@ -38,7 +39,6 @@ public class Menu extends javax.swing.JFrame {
         jMenu2 = new javax.swing.JMenu();
         itemCliente = new javax.swing.JMenuItem();
         itemUsuario = new javax.swing.JMenuItem();
-        itemArea = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         itemResolverReclamo = new javax.swing.JMenuItem();
         itemRegistrarReclamo = new javax.swing.JMenuItem();
@@ -49,8 +49,13 @@ public class Menu extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        desktopPane.setBackground(new java.awt.Color(153, 204, 255));
-        desktopPane.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        desktopPane.setBackground(new java.awt.Color(102, 51, 255));
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagen/telecom.jpeg"))); // NOI18N
+        jLabel1.setText("jLabel1");
+        desktopPane.add(jLabel1);
+        jLabel1.setBounds(670, 260, 200, 170);
+
         getContentPane().add(desktopPane, java.awt.BorderLayout.CENTER);
 
         jMenu1.setText("Archivo");
@@ -81,9 +86,6 @@ public class Menu extends javax.swing.JFrame {
         });
         jMenu2.add(itemUsuario);
 
-        itemArea.setText("Área");
-        jMenu2.add(itemArea);
-
         jMenuBar1.add(jMenu2);
 
         jMenu3.setText("Procesos");
@@ -91,7 +93,7 @@ public class Menu extends javax.swing.JFrame {
         itemResolverReclamo.setText("Resolver Reclamo");
         itemResolverReclamo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rr(evt);
+                itemResolverReclamoActionPerformed(evt);
             }
         });
         jMenu3.add(itemResolverReclamo);
@@ -108,7 +110,12 @@ public class Menu extends javax.swing.JFrame {
 
         jMenu4.setText("Consultas");
 
-        itemSeguimientoReclamo.setText("Seguimiento");
+        itemSeguimientoReclamo.setText("SeguimientoReclamos");
+        itemSeguimientoReclamo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemSeguimientoReclamoActionPerformed(evt);
+            }
+        });
         jMenu4.add(itemSeguimientoReclamo);
 
         jMenuBar1.add(jMenu4);
@@ -116,6 +123,11 @@ public class Menu extends javax.swing.JFrame {
         jMenu5.setText("Reportes");
 
         itemReporte.setText("Reporte");
+        itemReporte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemReporteActionPerformed(evt);
+            }
+        });
         jMenu5.add(itemReporte);
 
         jMenuBar1.add(jMenu5);
@@ -125,26 +137,45 @@ public class Menu extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+
     private void itemUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemUsuarioActionPerformed
-        // TODO add your handling code here:
+        try {
+            formularios.frmGestionUsuario ventana = new formularios.frmGestionUsuario();
+            this.desktopPane.add(ventana);
+            ventana.setVisible(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            javax.swing.JOptionPane.showMessageDialog(null, "Error al abrir la ventana: " + e.getMessage());
+        }
     }//GEN-LAST:event_itemUsuarioActionPerformed
 
     private void itemClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemClienteActionPerformed
-        // TODO add your handling code here:
+       FrmClientes frm = new FrmClientes();
+        frm.setLocationRelativeTo(this);
+        frm.setVisible(true);
     }//GEN-LAST:event_itemClienteActionPerformed
 
+    private void itemResolverReclamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemResolverReclamoActionPerformed
+        ReclamoView view = new ReclamoView();
+        ResolverReclamoController controller = new ResolverReclamoController(new ReclamoService(new ResolverReclamoDao()), view);
+        view.setVisible(true);
+    }//GEN-LAST:event_itemResolverReclamoActionPerformed
+
     private void itemRegistrarReclamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemRegistrarReclamoActionPerformed
-        // TODO add your handling code here:
         formRegistrarReclamo frm = new formRegistrarReclamo();
         frm.setLocationRelativeTo(this);
         frm.setVisible(true);
     }//GEN-LAST:event_itemRegistrarReclamoActionPerformed
 
-    private void rr(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rr
-        ReclamoView view = new ReclamoView();
-        ResolverReclamoController controller = new ResolverReclamoController(new ReclamoService(new ResolverReclamoDao()), view);
-        view.setVisible(true);
-    }//GEN-LAST:event_rr
+    private void itemReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemReporteActionPerformed
+    
+    }//GEN-LAST:event_itemReporteActionPerformed
+
+    private void itemSeguimientoReclamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemSeguimientoReclamoActionPerformed
+        ConsultarRegistroForm frm = new ConsultarRegistroForm();
+        frm.setLocationRelativeTo(this);
+        frm.setVisible(true);
+    }//GEN-LAST:event_itemSeguimientoReclamoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -183,7 +214,6 @@ public class Menu extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane desktopPane;
-    public javax.swing.JMenuItem itemArea;
     public javax.swing.JMenuItem itemCerrarSesion;
     public javax.swing.JMenuItem itemCliente;
     public javax.swing.JMenuItem itemRegistrarReclamo;
@@ -192,6 +222,7 @@ public class Menu extends javax.swing.JFrame {
     public javax.swing.JMenuItem itemSalir;
     public javax.swing.JMenuItem itemSeguimientoReclamo;
     public javax.swing.JMenuItem itemUsuario;
+    private javax.swing.JLabel jLabel1;
     public javax.swing.JMenu jMenu1;
     public javax.swing.JMenu jMenu2;
     public javax.swing.JMenu jMenu3;

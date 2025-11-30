@@ -14,5 +14,6 @@ public interface IReclamo {
     void resolverReclamoConResolucion(int idReclamo, Date fechaResolucion, String descripcion, String responsable) throws Exception;
 
     void actualizarResolucion(int idReclamo, String descripcion, String responsable) throws Exception;
+    
 
 }
