@@ -102,6 +102,11 @@ public class Menu extends javax.swing.JFrame {
         jMenu5.setText("Reportes");
 
         itemReporte.setText("Reporte");
+        itemReporte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemReporteActionPerformed(evt);
+            }
+        });
         jMenu5.add(itemReporte);
 
         jMenuBar1.add(jMenu5);
@@ -118,6 +123,12 @@ public class Menu extends javax.swing.JFrame {
     private void itemClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemClienteActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_itemClienteActionPerformed
+
+    private void itemReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemReporteActionPerformed
+    ReporteReclamosView2 ventana = new ReporteReclamosView2();
+    ventana.setLocationRelativeTo(null); // centrar
+    ventana.setVisible(true);
+    }//GEN-LAST:event_itemReporteActionPerformed
 
     /**
      * @param args the command line arguments

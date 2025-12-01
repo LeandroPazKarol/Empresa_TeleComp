@@ -7,13 +7,13 @@ public class DetalleReclamo {
     private Date fechaRegistro;
     private String tipo;
     private String estado;
-    private Date fechaResolucion; // puede ser null
-    private Double tiempoResolucionHoras; // puede ser null
+    private Date fechaResolucion; 
+    private Double tiempoResolucionHoras; 
     private boolean primerContacto;
 
     public DetalleReclamo() {}
 
-    // getters y setters
+   
     public int getIdReclamo() { return idReclamo; }
     public void setIdReclamo(int idReclamo) { this.idReclamo = idReclamo; }
     public Date getFechaRegistro() { return fechaRegistro; }

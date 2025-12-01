@@ -14,4 +14,4 @@ public interface IReporteDAO {
     double obtenerPromedioHorasResolucion() throws SQLException;
     double obtenerPorcentajePrimerContacto() throws SQLException;
     List<DetalleReclamo> listarDetalleReporte(Timestamp desde, Timestamp hasta) throws SQLException;
-}
+}   
