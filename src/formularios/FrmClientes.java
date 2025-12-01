@@ -11,11 +11,8 @@ public class FrmClientes extends javax.swing.JFrame {
     private ClienteController controller = new ClienteController();
 
     public FrmClientes() {
-        // Inicializa los componentes visuales
         initComponents();
-        // Centra la ventana en la pantalla
         this.setLocationRelativeTo(null); 
-        // Carga la lista de clientes al abrir
         listarClientes(); 
     }
 
