@@ -1,6 +1,4 @@
-
 package formularios;
-
 
 import javax.swing.JOptionPane;
 
@@ -8,11 +6,10 @@ import Controller.ReclamoController;
 import TableModel.ReclamoTableModel;
 import javax.swing.JFrame;
 
-
 public class ConsultarRegistroForm extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ConsultarRegistroForm.class.getName());
-    
+
     /**
      * Creates new form ConsultarRegistroForm
      */
@@ -87,7 +84,7 @@ public class ConsultarRegistroForm extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new ConsultarRegistroForm().setVisible(true));
-        
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -96,18 +93,15 @@ public class ConsultarRegistroForm extends javax.swing.JFrame {
     private javax.swing.JLabel lblRtotal;
     private javax.swing.JLabel lbltext1;
     // End of variables declaration//GEN-END:variables
-     
+
     ReclamoController obj = new ReclamoController();
-    
-    
+
     private void cargarTabla() {
-    try {
-        ReclamoTableModel model = obj.obtenerTablaReclamos() ;
-        RegistroTable.setModel(model);
-        lblRtotal.setText(model.getRowCount() + "");
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, e.getMessage());
+        try {
+            obj.cargarReclamosEn(RegistroTable, lblRtotal);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
     }
-}
-  
+
 }

@@ -16,8 +16,8 @@ public class ReclamoController {
         clienteDao = new ClienteDao();
         reclamoDao = new ReclamoDao();
     }
-    
-    public List<Reclamo> ReclamoListar() throws Exception{
+
+    public List<Reclamo> ReclamoListar() throws Exception {
         return reclamoDao.readAll();
     }
 
@@ -28,8 +28,21 @@ public class ReclamoController {
     public boolean registrarReclamo(Reclamo reclamo) throws Exception {
         return reclamoDao.registrarReclamo(reclamo);
     }
-    
-  
+
+    public void cargarReclamosEn(javax.swing.JTable tabla, javax.swing.JLabel lblTotal) throws Exception {
+        ReclamoTableModel model = obtenerTablaReclamos();
+        tabla.setModel(model);
+        lblTotal.setText(String.valueOf(model.getRowCount()));
+    }
+
+    public boolean actualizarReclamo(Reclamo r) throws Exception {
+        return reclamoDao.actualizarReclamo(r);
+    }
+
+    public boolean eliminarReclamo(int idReclamo) throws Exception {
+        return reclamoDao.eliminarReclamo(idReclamo);
+    }
+
     public ReclamoTableModel obtenerTablaReclamos() throws Exception {
         List<Reclamo> lista = reclamoDao.readAll();
         return new ReclamoTableModel(lista);

@@ -8,8 +8,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 public class ReclamoDao {
-    
-    
+
     Statement stm = null;
     PreparedStatement ps = null;
     ResultSet rs = null;
@@ -18,10 +17,7 @@ public class ReclamoDao {
     private Connection con = ConexionBD.getConnection();
 
     public boolean registrarReclamo(Reclamo r) {
-        String sql = "{CALL sp_registrarReclamo(?,?,?,?,?,?,?)}";
-
-        try (CallableStatement cs = con.prepareCall(sql)) {
-
+        try (CallableStatement cs = con.prepareCall("{CALL sp_registrarReclamo(?,?,?,?,?,?,?)}")) {
             cs.setString(1, r.getTipo());
             cs.setString(2, r.getDescripcion());
             cs.setString(3, r.getEstado());
@@ -38,8 +34,36 @@ public class ReclamoDao {
             return false;
         }
     }
-    
-    
+
+    public boolean actualizarReclamo(Reclamo r) {
+        try (CallableStatement cs = con.prepareCall("{CALL sp_actualizarReclamo(?,?,?,?,?,?,?,?)}")) {
+            cs.setInt(1, r.getIdReclamo());
+            cs.setString(2, r.getTipo());
+            cs.setString(3, r.getDescripcion());
+            cs.setString(4, r.getEstado());
+            cs.setString(5, r.getCanalIngreso());
+            cs.setInt(6, r.getIdCLiente());
+            cs.setInt(7, r.getIdAreaAsignada());
+            cs.setInt(8, r.getIdUsuarioRegistra());
+            cs.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al actualizar reclamo: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean eliminarReclamo(int idReclamo) {
+        try (CallableStatement cs = con.prepareCall("{CALL sp_eliminarReclamo(?)}")) {
+            cs.setInt(1, idReclamo);
+            cs.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al eliminar reclamo: " + e.getMessage());
+            return false;
+        }
+    }
+
     public List<Reclamo> readAll() throws Exception {
         List<Reclamo> lista = new ArrayList<>();
         try {
@@ -57,7 +81,7 @@ public class ReclamoDao {
         }
         return lista;
     }
-    
+
     private List<Reclamo> cargaLista(ResultSet rs) throws SQLException {
         List<Reclamo> aux = new ArrayList<>();
         while (rs.next()) {

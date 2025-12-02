@@ -48,6 +48,8 @@ public class formRegistrarReclamo extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         txtDescripcion = new javax.swing.JTextArea();
         btnRegistrar = new javax.swing.JButton();
+        btnActualizar = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -143,7 +145,23 @@ public class formRegistrarReclamo extends javax.swing.JFrame {
                 btnRegistrarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnRegistrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 520, 200, 40));
+        jPanel1.add(btnRegistrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 520, 160, 40));
+
+        btnActualizar.setText("Actualizar Reclamo");
+        btnActualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 520, 160, 40));
+
+        btnEliminar.setText("Eliminar Reclamo");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 520, 160, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -184,6 +202,16 @@ public class formRegistrarReclamo extends javax.swing.JFrame {
         // TODO add your handling code here:
         registrar();
     }//GEN-LAST:event_btnRegistrarActionPerformed
+
+    private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
+        // TODO add your handling code here:
+        actualizar();
+    }//GEN-LAST:event_btnActualizarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        // TODO add your handling code here:
+        eliminar();
+    }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void buscar(){        
         String dni = txtDNI.getText().trim();
@@ -235,6 +263,55 @@ public class formRegistrarReclamo extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }
+    
+    private void actualizar() {
+        if (idClienteEncontrado == -1) {
+            JOptionPane.showMessageDialog(this, "Debe buscar un cliente primero.");
+            return;
+        }
+        String idTexto = JOptionPane.showInputDialog(this, "Ingrese ID del reclamo a actualizar:");        
+        if (idTexto == null || idTexto.trim().isEmpty()) {            
+            return;
+        }
+        int idReclamo = Integer.parseInt(idTexto);        
+        ReclamoFactory factory = FabricaReclamos.getFactory(cboTipo.getSelectedItem().toString());
+        Reclamo base = factory.crearReclamo();        
+        Reclamo reclamo = new ReclamoBuilder(base)                
+                .descripcion(txtDescripcion.getText())
+                .canal(cboCanal.getSelectedItem().toString())
+                .cliente(idClienteEncontrado)
+                .area(cboArea.getSelectedIndex() + 1)
+                .usuario(1)
+                .build();
+        reclamo.setIdReclamo(idReclamo);
+        try {            
+            if (controller.actualizarReclamo(reclamo)) {                
+                JOptionPane.showMessageDialog(this, "Reclamo actualizado.");                
+            } else {
+                JOptionPane.showMessageDialog(this, "No se pudo actualizar.");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }
+   
+    private void eliminar() {                
+        String idTexto = JOptionPane.showInputDialog(this, "Ingrese ID del reclamo a eliminar:");
+        if (idTexto == null || idTexto.trim().isEmpty()) {
+            return;
+        }
+        int idReclamo = Integer.parseInt(idTexto);
+        try {
+            if (controller.eliminarReclamo(idReclamo)) {
+                JOptionPane.showMessageDialog(this, "Reclamo eliminado.");
+            } else {
+                JOptionPane.showMessageDialog(this, "No se pudo eliminar.");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -268,7 +345,9 @@ public class formRegistrarReclamo extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnRegistrar;
     private javax.swing.JComboBox<String> cboArea;
     private javax.swing.JComboBox<String> cboCanal;

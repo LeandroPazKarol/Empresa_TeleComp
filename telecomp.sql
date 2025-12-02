@@ -11,6 +11,12 @@ CREATE TABLE Cliente (
     numeroContrato VARCHAR(20) UNIQUE
 );
 
+CREATE TABLE Area (
+    idArea INT AUTO_INCREMENT PRIMARY KEY,
+    nombreArea VARCHAR(50) NOT NULL UNIQUE,
+    descripcion VARCHAR(255)
+);
+
 CREATE TABLE Usuario (
     idUsuario INT AUTO_INCREMENT PRIMARY KEY,
     nombreUsuario VARCHAR(50) NOT NULL UNIQUE,
@@ -20,12 +26,6 @@ CREATE TABLE Usuario (
     FOREIGN KEY (idArea) REFERENCES Area(idArea)
 );
 
-
-CREATE TABLE Area (
-    idArea INT AUTO_INCREMENT PRIMARY KEY,
-    nombreArea VARCHAR(50) NOT NULL UNIQUE,
-    descripcion VARCHAR(255)
-);
 
 CREATE TABLE Reclamo (
     idReclamo INT AUTO_INCREMENT PRIMARY KEY,
@@ -164,14 +164,14 @@ DELIMITER ;
  
 DELIMITER //
 
-CREATE PROCEDURE sp_buscarClientesPorDNI(
+CREATE PROCEDURE sp_buscarClientePorDNI(
     IN p_dni VARCHAR(8)
 )
 BEGIN
     SELECT 
         idCliente,
         DNI,
-        nombres,
+        nombre,
         apellidos,
         telefono,
         email,
@@ -183,20 +183,6 @@ END //
 DELIMITER ;
 select * from resolucion;
 select * from reclamo;
-DELIMITER //
-CREATE PROCEDURE sp_resolverReclamoConResolucion(
-    IN p_idReclamo INT,
-    IN p_fechaResolucion DATE,
-    IN p_descripcion TEXT,
-    IN p_responsable VARCHAR(100)
-)
-BEGIN
-    INSERT INTO Resolucion(fechaResolucion, descripcion, responsable, idReclamo)
-    VALUES(p_fechaResolucion, p_descripcion, p_responsable, p_idReclamo);
-    
-    UPDATE Reclamo SET estado = 'Resuelto' WHERE idReclamo = p_idReclamo;
-END;
-//DELIMITER ;
 
 DELIMITER //
 CREATE PROCEDURE sp_listarTodosReclamosConResolucion()
@@ -462,7 +448,7 @@ BEGIN
     START TRANSACTION;
     
     -- Actualizar ESTADO a 'resuelto'
-    UPDATE Reclamo SET estado = 'resuelto' WHERE idReclamo = p_idReclamo;
+    UPDATE Reclamo SET estado = 'Resuelto' WHERE idReclamo = p_idReclamo;
     
     -- Guardar resolución
     INSERT INTO Resolucion (idReclamo, fechaResolucion, descripcion, responsable)
@@ -471,6 +457,49 @@ BEGIN
     COMMIT;
 END //
 DELIMITER ;
+DELIMITER $$
+CREATE PROCEDURE sp_actualizarReclamo(
+    IN p_idReclamo INT,
+    IN p_tipo VARCHAR(50),
+    IN p_descripcion TEXT,
+    IN p_estado VARCHAR(20),
+    IN p_canal VARCHAR(30),
+    IN p_idCliente INT,
+    IN p_idArea INT,
+    IN p_idUsuario INT
+)
+BEGIN
+    UPDATE reclamo
+    SET 
+        tipo = p_tipo,
+        descripcion = p_descripcion,
+        estado = p_estado,
+        canalIngreso = p_canal,
+        idCliente = p_idCliente,
+        idAreaAsignada = p_idArea,
+        idUsuarioRegistra = p_idUsuario
+    WHERE idReclamo = p_idReclamo;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE sp_eliminarReclamo(
+    IN p_idReclamo INT
+)
+BEGIN
+    DELETE FROM reclamo
+    WHERE idReclamo = p_idReclamo;
+END $$
+
+DELIMITER ;
+select * from cliente;
+select * from usuario;
+select * from reclamo;
+
+select*from notificacion;
+select*from encuestasatisfaccion;
 
 
 
