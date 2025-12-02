@@ -29,7 +29,11 @@ public class ReclamoController {
         return reclamoDao.registrarReclamo(reclamo);
     }
     
-    
+    public void cargarReclamosEn(javax.swing.JTable tabla, javax.swing.JLabel lblTotal) throws Exception {
+    ReclamoTableModel model = obtenerTablaReclamos();
+    tabla.setModel(model);
+    lblTotal.setText(String.valueOf(model.getRowCount()));
+}
 
     public ReclamoTableModel obtenerTablaReclamos() throws Exception {
         List<Reclamo> lista = reclamoDao.readAll();

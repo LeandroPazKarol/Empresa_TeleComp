@@ -13,28 +13,22 @@ import javax.swing.table.AbstractTableModel;
 import entity.Reclamo;
 
 public class ReclamoTableModel extends AbstractTableModel {
-
     private final String[] columnas = {
         "ID", "Fecha", "Tipo", "Descripción", "Estado",
         "Canal", "Cliente", "ÁreaAsignada", "UsuarioRegistra"
     };
-
     private List<Reclamo> lista;
-
     public ReclamoTableModel(List<Reclamo> lista) {
         this.lista = lista;
     }
-
     @Override
     public int getRowCount() {
         return lista == null ? 0 : lista.size();
     }
-
     @Override
     public int getColumnCount() {
         return columnas.length;
     }
-
     @Override
     public String getColumnName(int column) {
         return columnas[column];

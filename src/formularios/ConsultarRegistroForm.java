@@ -102,40 +102,9 @@ public class ConsultarRegistroForm extends javax.swing.JFrame {
      
     ReclamoController obj = new ReclamoController();
     
-    /*private void listaProductos() {
-        try {
-            List<Reclamo> lista = obj.ReclamoListar();
-            if (lista != null || lista.isEmpty()) {
-                lblRtotal.setText(lista.size() + "");
-                verProductos(lista);
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.getMessage());
-        }
-    }*/
-
-    
-    
-    /*private void verProductos(List<Reclamo> lista) {
-        // variable de tipo tabla
-        DefaultTableModel tabla = (DefaultTableModel) RegistroTable.getModel();
-        tabla.setRowCount(0);
-        for (Reclamo x : lista) {
-            Object[] fila = {x.getIdReclamo(), x.getFechaRegistro(),
-                x.getTipo(), x.getDescripcion(),
-                x.getEstado(), x.getCanalIngreso(), x.getIdCLiente(),
-                x.getIdAreaAsignada(), x.getIdUsuarioRegistra()};
-            tabla.addRow(fila);
-        }
-    }*/
-
-    
-    
     private void cargarTabla() {
     try {
-        ReclamoTableModel model = obj.obtenerTablaReclamos() ;
-        RegistroTable.setModel(model);
-        lblRtotal.setText(model.getRowCount() + "");
+        obj.cargarReclamosEn(RegistroTable, lblRtotal);
     } catch (Exception e) {
         JOptionPane.showMessageDialog(null, e.getMessage());
     }
